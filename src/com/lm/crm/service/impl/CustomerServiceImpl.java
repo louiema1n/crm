@@ -56,4 +56,43 @@ public class CustomerServiceImpl implements CustomerService {
 		session.close();
 	}
 
+	@Override
+	public Customer findCustomerByTel(String telephone) {
+		//获取session
+		Session session = HibernateUtils.openSession();
+		//开启事务
+		session.beginTransaction();
+		//书写hql
+		String hql = "from Customer where telephone = ?";
+		//设置参数并查询
+		List<Customer> customers = session.createQuery(hql).setParameter(0, telephone).list();
+		//提交事务
+		session.getTransaction().commit();
+		session.close();
+		if (customers != null && customers.size() > 0) {
+			return customers.get(0);
+		}
+		return null;
+
+	}
+
+	@Override
+	public String findDecidedzoneIdByAddr(String address) {
+		//获取session
+		Session session = HibernateUtils.openSession();
+		//开启事务
+		session.beginTransaction();
+		//书写hql
+		String hql = "select decidedzone_id from Customer where address = ?";
+		//设置参数并查询
+		List<String> decidedzone_ids = session.createQuery(hql).setParameter(0, address).list();
+		//提交事务
+		session.getTransaction().commit();
+		session.close();
+		if (decidedzone_ids != null && decidedzone_ids.size() > 0) {
+			return decidedzone_ids.get(0);
+		}
+		return null;
+	}
+
 }
